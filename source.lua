@@ -29,7 +29,7 @@ local Luna = { Folder = "Luna", Options = {}, ThemeGradient = ColorSequence.new{
 local game = cloneref(game)
 local CoreGui = cloneref(game:GetService("CoreGui"))
 local Players = cloneref(game:GetService("Players"))
-local Player = cloneref(Players.LocalPlayer)
+local LocalPlayer = cloneref(Players.LocalPlayer)
 
 local UserInputService = game:GetService("UserInputService")
 local TweenService = game:GetService("TweenService")
