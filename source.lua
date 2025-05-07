@@ -63,51 +63,7 @@ local PresetGradients = {
 	Blossom = {Color3.fromRGB(255, 165, 243), Color3.fromRGB(213, 129, 231), Color3.fromRGB(170, 92, 218)},
 }
 
-local function GetIcon(icon, source)
-	if source == "Custom" then
-		return icon
-	elseif source == "Lucide" then
-		-- full credit to latte softworks :)
-		local iconData = not isStudio and game:HttpGet("https://raw.githubusercontent.com/latte-soft/lucide-roblox/refs/heads/master/lib/Icons.luau")
-		local icons = isStudio and IconModule.Lucide or loadstring(iconData)()
-		if not isStudio then
-			icon = string.match(string.lower(icon), "^%s*(.*)%s*$") :: string
-			local sizedicons = icons['48px']
 
-			local r = sizedicons[icon]
-			if not r then
-				error("Lucide Icons: Failed to find icon by the name of \"" .. icon .. "\.", 2)
-			end
-
-			local rirs = r[2]
-			local riro = r[3]
-
-			if type(r[1]) ~= "number" or type(rirs) ~= "table" or type(riro) ~= "table" then
-				error("Lucide Icons: Internal error: Invalid auto-generated asset entry")
-			end
-
-			local irs = Vector2.new(rirs[1], rirs[2])
-			local iro = Vector2.new(riro[1], riro[2])
-
-			local asset = {
-				id = r[1],
-				imageRectSize = irs,
-				imageRectOffset = iro,
-			}
-
-			return asset
-		else
-			return nil
-		end
-	else	
-		if icon ~= nil and IconModule[source] then
-			local sourceicon = IconModule[source]
-			return sourceicon[icon]
-		else
-			return nil
-		end
-	end
-end
 
 local function RemoveTable(tablre, value)
 	for i,v in pairs(tablre) do
@@ -900,54 +856,6 @@ function Luna:CreateWindow(WindowSettings)
 				})
 			end
 		end)
-
-		local friendsCooldown = 0
-		local function getPing() return math.clamp(game:GetService("Stats").Network.ServerStatsItem["Data Ping"]:GetValue(), 10, 700) end
-
-		local function checkFriends()
-			if friendsCooldown == 0 then
-
-				friendsCooldown = 25
-
-				local playersFriends = {}
-				local friendsInTotal = 0
-				local onlineFriends = 0 
-				local friendsInGame = 0 
-
-				local list = Players:GetFriendsAsync(Player.UserId)
-				while true do -- loop through all the pages
-					for _, data in list:GetCurrentPage() do
-						friendsInTotal +=1
-						table.insert(playersFriends, Data)
-					end
-
-					if list.IsFinished then
-						-- stop the loop since this is the last page
-						break
-					else 
-						-- go to the next page
-						list:AdvanceToNextPageAsync()
-					end
-				end
-				for i, v in pairs(Player:GetFriendsOnline()) do
-					onlineFriends += 1
-				end
-
-				for i,v in pairs(playersFriends) do
-					if Players:FindFirstChild(v.Username) then
-						friendsInGame = friendsInGame + 1
-					end
-				end
-
-				HomeTabPage.detailsholder.dashboard.Friends.All.Value.Text = tostring(friendsInTotal).." friends"
-				HomeTabPage.detailsholder.dashboard.Friends.Offline.Value.Text = tostring(friendsInTotal - onlineFriends).." friends"
-				HomeTabPage.detailsholder.dashboard.Friends.Online.Value.Text = tostring(onlineFriends).." friends"
-				HomeTabPage.detailsholder.dashboard.Friends.InGame.Value.Text = tostring(friendsInGame).." friends"
-
-			else
-				friendsCooldown -= 1
-			end
-		end
 
 		local function format(Int)
 			return string.format("%02i", Int)
