@@ -1703,22 +1703,11 @@ getgenv().protect_gui = newcclosure(function(Gui)
     end
 end)
 
--- Define the protect_gui function as you did earlier
-getgenv().protect_gui = newcclosure(function(Gui)
-    if Gui and type(Gui) == "userdata" then
-        local Gui2 = cloneref(Gui)  -- Create a reference (not a clone) of the GUI
-        if get_hidden_gui or gethui then
-            local Hid = get_hidden_gui or gethui
-            Gui2.Parent = Hid()  -- Set the parent of Gui2 to the hidden GUI
-        end
-    end
-end)
-
 -- Now use protect_gui to handle LunaUI:
 
 if gethui then
     -- If gethui is available, protect and parent LunaUI to gethui()
-    getgenv().protect_gui(LunaUI)  -- Protect LunaUI first
+    protect_gui(LunaUI)  -- Protect LunaUI first
     LunaUI.Parent = gethui()  -- Parent to hidden GUI
 elseif syn and syn.protect_gui then
     -- If syn.protect_gui is available, use it to protect LunaUI, then parent it to CoreGui
