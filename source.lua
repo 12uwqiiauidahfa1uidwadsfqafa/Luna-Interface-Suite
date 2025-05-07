@@ -1936,8 +1936,6 @@ function Luna:Notification(data) -- action e.g open messages
 		newNotification.Parent = Notifications
 		newNotification.LayoutOrder = #Notifications:GetChildren()
 		newNotification.Visible = false
-		BlurModule(newNotification)
-
 		-- Set Data
 		newNotification.Title.Text = data.Title
 		newNotification.Description.Text = data.Content 
@@ -2160,8 +2158,6 @@ function Luna:CreateWindow(WindowSettings)
 	-- end)
 
 	LunaUI.Enabled = true
-
-
 	if WindowSettings.KeySystem then
 		local KeySettings = WindowSettings.KeySettings
 		
