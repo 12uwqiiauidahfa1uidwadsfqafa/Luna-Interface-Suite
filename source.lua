@@ -1691,17 +1691,48 @@ local function Hide(Window, bind, notif)
 	Window.Visible = false
 end
 
+getgenv().protect_gui = newcclosure(function(Gui)
+    if Gui and type(Gui) == "userdata" then
+        local Gui2 = cloneref(Gui)
+        if get_hidden_gui or gethui then
+            local Hid = get_hidden_gui or gethui
+            Gui2.Parent = Hid()
+        end
+    end
+end)
+
+-- Define the protect_gui function as you did earlier
+getgenv().protect_gui = newcclosure(function(Gui)
+    if Gui and type(Gui) == "userdata" then
+        local Gui2 = cloneref(Gui)  -- Create a reference (not a clone) of the GUI
+        if get_hidden_gui or gethui then
+            local Hid = get_hidden_gui or gethui
+            Gui2.Parent = Hid()  -- Set the parent of Gui2 to the hidden GUI
+        end
+    end
+end)
+
+-- Now use protect_gui to handle LunaUI:
 
 if gethui then
-	LunaUI.Parent = gethui()
-elseif syn and syn.protect_gui then 
-	syn.protect_gui(LunaUI)
-	LunaUI.Parent = CoreGui
-elseif not isStudio and CoreGui:FindFirstChild("RobloxGui") then
-	LunaUI.Parent = CoreGui:FindFirstChild("RobloxGui")
+    -- If gethui is available, protect and parent LunaUI to gethui()
+    getgenv().protect_gui(LunaUI)  -- Protect LunaUI first
+    LunaUI.Parent = gethui()  -- Parent to hidden GUI
+elseif syn and syn.protect_gui then
+    -- If syn.protect_gui is available, use it to protect LunaUI, then parent it to CoreGui
+    syn.protect_gui(LunaUI)  -- Protect LunaUI using Synapse X method
+    LunaUI.Parent = CoreGui  -- Parent to CoreGui
 elseif not isStudio then
-	LunaUI.Parent = CoreGui
+    -- If not in Studio, check if RobloxGui exists and parent it to RobloxGui
+    local robloxGui = CoreGui:FindFirstChild("RobloxGui")
+    if robloxGui then
+        LunaUI.Parent = robloxGui
+    else
+        -- Otherwise, parent directly to CoreGui
+        LunaUI.Parent = CoreGui
+    end
 end
+
 
 if gethui then
 	for _, Interface in ipairs(gethui():GetChildren()) do
