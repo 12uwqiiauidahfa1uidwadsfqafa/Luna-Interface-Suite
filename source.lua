@@ -65,7 +65,7 @@ local PresetGradients = {
 
 local function GetIcon(icon, source)
 	if source == "Custom" then
-		return nil .. icon
+		return icon
 	elseif source == "Lucide" then
 		-- full credit to latte softworks :)
 		local iconData = not isStudio and game:HttpGet("https://raw.githubusercontent.com/latte-soft/lucide-roblox/refs/heads/master/lib/Icons.luau")
