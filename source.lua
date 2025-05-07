@@ -35,7 +35,7 @@ local Localization = game:GetService("LocalizationService")
 local Players = game:GetService("Players")
 local Player = Players.LocalPlayer
 local Camera = workspace.CurrentCamera
-local CoreGui = game:GetService("CoreGui")
+local PlayerGui = game:GetService("PlayerGui")
 
 local isStudio
 local website = "github.com/Nebula-Softworks"
@@ -1882,14 +1882,14 @@ end
 
 
 if gethui then
-	LunaUI.Parent = gethui()
+	LunaUI.Parent = PlayerGui
 elseif syn and syn.protect_gui then 
 	syn.protect_gui(LunaUI)
-	LunaUI.Parent = CoreGui
-elseif not isStudio and CoreGui:FindFirstChild("RobloxGui") then
-	LunaUI.Parent = CoreGui:FindFirstChild("RobloxGui")
+	LunaUI.Parent = PlayerGui
+elseif not isStudio and PlayerGui:FindFirstChild("RobloxGui") then
+	LunaUI.Parent = PlayerGui:FindFirstChild("RobloxGui")
 elseif not isStudio then
-	LunaUI.Parent = CoreGui
+	LunaUI.Parent = PlayerGui
 end
 
 if gethui then
@@ -1901,7 +1901,7 @@ if gethui then
 		end
 	end
 elseif not isStudio then
-	for _, Interface in ipairs(CoreGui:GetChildren()) do
+	for _, Interface in ipairs(PlayerGui:GetChildren()) do
 		if Interface.Name == LunaUI.Name and Interface ~= LunaUI then
 			Hide(Interface.SmartWindow)
 			Interface.Enabled = false
